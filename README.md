@@ -88,4 +88,25 @@ def wspeed(w_l, w_r):
     return dt, wl,wr,  dencl, dencr
 ```
 
+Далее идут функции callback() и listener() благодаря которым выводятся значения координат роботов и показания энкодеров.
+
+```python
+def callback(data):
+    funny(data.linear_vel, data.angular_vel)
+    rospy.loginfo("Encoder_left %0.2f", encl)
+    rospy.loginfo("Encoder_right %0.2f", encr)
+    rospy.loginfo("Y: %0.2f", y_g)
+    rospy.loginfo("X: %0.2f", x_g)
+
+def listener():
+    rospy.init_node('custom_listener', anonymous=True)
+    rospy.Subscriber("custom_chatter", Robot_systems, callback)
+    t_g = float(rospy.get_time())
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
+
+if __name__ == '__main__':
+    listener()
+```
+
 В папочке Screen представлены скриншоты экрана при нулевых скоростях робота, а также при движении.
