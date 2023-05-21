@@ -108,5 +108,50 @@ def listener():
 if __name__ == '__main__':
     listener()
 ```
+##Управление роботом
 
+В функции talker() описывается управление роботом с помощью клавиш: 
+w и x для управления линейной скоростью, 
+a и d для управления угловой скоростью
+s для сброса.
+
+```python
+def talker():
+
+    target_linear_vel   = 0.0
+    target_angular_vel  = 0.0
+    control_linear_vel  = 0.0
+    control_angular_vel = 0.0
+
+    pub = rospy.Publisher('custom_chatter', Robot_systems)
+    rospy.init_node('custom_talker', anonymous=True)
+    r = rospy.Rate(10) #10 hz
+
+    while not rospy.is_shutdown():
+        key = getKey()
+        if key == 'w' :
+            control_linear_vel  += 0.1
+        elif key == 'x' :
+            control_linear_vel  -= 0.1
+        elif key == 'a' :
+            control_angular_vel  -= 0.1
+        elif key == 'd' :
+            control_angular_vel  += 0.1
+        elif key == ' ' or key == 's' :
+            control_linear_vel  = 0.0
+            control_angular_vel = 0.0
+        else:
+            if (key == '\x03'):
+                break
+
+        msg = Robot_systems()
+        msg.linear_vel = control_linear_vel
+        msg.angular_vel = control_angular_vel
+        msg.time = rospy.get_time()
+
+        rospy.loginfo(msg)
+        pub.publish(msg)
+        r.sleep()
+
+```
 В папочке Screen представлены скриншоты экрана при нулевых скоростях робота, а также при движении.
