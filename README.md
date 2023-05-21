@@ -3,8 +3,6 @@
 Производится импорт библиотек и объявление глобальных переменных, изначально имеющих нулевые значения.
 
 ```python
-#!/usr/bin/env python
-
 import rospy
 import math
 from pr_5.msg import Robot_systems
